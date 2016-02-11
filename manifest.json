@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Slack返信引用ボタン Slack Reply and Quote Button",
+  "description": "Slack に返信と引用ボタンをつけます。 Add a reply(mention) and quotation button to Slack.",
+  "version" : "1.0.1",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "homepage_url": "http://gam0022.net/",
+  "content_scripts":[
+    {
+      "matches" : [ "https://*.slack.com/*"],
+      "js": ["script.js"],
+      "run_at" : "document_end"
+    }
+  ]
+}
