@@ -29,12 +29,14 @@ document.body.appendChild(function() {
       var messageText = document.getElementById('message-input');
       messageText.value += '\n' + (/https:\/\/[a-zA-Z0-9-]+\.slack\.com/g).exec(location.href)[0] + $(target).data('refurl');
       $('#message-input').trigger("autosize").trigger("autosize-resize");
+      messageText.focus();
     }
 
     onReplyClick = function(target){
       var messageText = document.getElementById('message-input');
       messageText.value = '@' + $(target).data('user') + ' :\n' + ( $(target).data('repmes') ? ( '>' + $(target).data('repmes') + '\n' ) : "" ) + messageText.value;
       $('#message-input').trigger("autosize").trigger("autosize-resize");
+      messageText.focus();
     }
   }
 
