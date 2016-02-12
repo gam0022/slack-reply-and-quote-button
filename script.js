@@ -5,6 +5,10 @@ document.body.appendChild(function() {
     originalBuildMsgHTML = TS.templates.builders.buildMsgHTML;
     TS.templates.builders.buildMsgHTML = function(O, h) {
       var target = originalBuildMsgHTML(O, h);
+      if (!$(target)[0].id.startsWith('msg_')) {
+        return target;
+      }
+
       var msg = $(target);
       var msgContent = msg.children('.message_content');
       var container = msg.children('.action_hover_container');
