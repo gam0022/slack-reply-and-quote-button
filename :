@@ -8,18 +8,31 @@ document.body.appendChild(function() {
       var msg = $(target);
       var msgContent = msg.children('.message_content');
       var container = msg.children('.action_hover_container');
-      var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hide ts_tip_hidden";
 
-      // Quote Button
       var refUrl = msgContent.children('a.timestamp').attr("href");
-      var quoteButton = $('<a data-action="quote" class="' + buttonClass + '" data-refurl="' + refUrl + '" onclick="onQuoteClick(this)"><span class="ts_tip_tip">Quote</span>Qt</a>');
+      var quoteButton = $('<a data-action="quote" class="ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hide ts_tip_hidden" data-refurl="' + refUrl + '" onclick="onQuoteClick(this)"><span class="ts_tip_tip">Quote</span>Qt</a>');
       quoteButton = container.find('[data-action="copy_link"]').after(quoteButton);
 
-      // Reply Button
       var senderHref = msgContent.find("a.message_sender").attr('href');
       var senderUser = senderHref != null ? senderHref.split('/')[2] : "error";
-      var repMessage = msgContent.children("span.message_body").text();
-      var replyButton = $('<a data-action="reply" class="' + buttonClass + '" data-user="' + senderUser + '" data-repMes="' + repMessage + '" onclick="onReplyClick(this)"><span class="ts_tip_tip">Reply</span>Re</a>');
+      var repMessage = ""; //msgContent.children("span.message_body").text();
+      var replyButton = $('<a data-action="reply" class="ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hide ts_tip_hidden" data-user="' + senderUser + '" data-repMes="' + repMessage + '" onclick="onReplyClick(this)"><span class="ts_tip_tip">Reply</span>Re</a>');
+      quoteButton = $("<a><span class="ts_tip_tip">Reply</span></a>", {
+        addClass: "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hide ts_tip_hidden",
+        on: {
+          click: function(target) {
+            var messageText = document.getElementById('message-input');
+            messageText.value += '\n' + "https://" + location.host + '/' + $(target).data('refurl');
+            messageText.focus();
+            $('#message-input').trigger("autosize").trigger("autosize-resize");
+          }
+        },
+        data: {
+          data-user: senderUser,
+          repMessage: repMessage
+        }
+      });
+      console.log(quoteButton);
       quoteButton.after(replyButton);
 
       return msg[0].outerHTML;
