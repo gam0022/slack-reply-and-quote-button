@@ -53,7 +53,7 @@ document.body.appendChild(function() {
     $(document).on("click", "[data-action='quote']", function(event) {
       var messageInput = document.getElementById('message-input');
       var url = $(event.target).data('url');
-      messageInput.value += '\n' + "https://" + location.host + '/' + url;
+      messageInput.value += '\n' + "https://" + location.host + url;
       messageInput.focus();
       $('#message-input').trigger("autosize").trigger("autosize-resize");
     });
