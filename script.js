@@ -18,10 +18,12 @@ document.body.appendChild(function() {
 
       // Reply Button
       var senderHref = msgContent.find("a.message_sender").attr('href');
-      var senderUser = senderHref != null ? senderHref.split('/')[2] : "error";
-      var repMessage = msgContent.children("span.message_body").text();
-      var replyButton = $('<a data-action="reply" class="' + buttonClass + '" data-user="' + senderUser + '" data-repMes="' + repMessage + '" onclick="onReplyClick(this)"><span class="ts_tip_tip">Reply</span>Re</a>');
-      quoteButton.after(replyButton);
+      if (senderHref != null) {
+        var senderUser = senderHref.split('/')[2];
+        var repMessage = msgContent.children("span.message_body").text();
+        var replyButton = $('<a data-action="reply" class="' + buttonClass + '" data-user="' + senderUser + '" data-repMes="' + repMessage + '" onclick="onReplyClick(this)"><span class="ts_tip_tip">Reply</span>Re</a>');
+        quoteButton.after(replyButton);
+      }
 
       return selfHtml(target);
     }
