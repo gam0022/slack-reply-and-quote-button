@@ -60,8 +60,9 @@ document.body.appendChild(function() {
 
     $(document).on("click", "[data-action='reply']", function(event) {
       var messageInput = document.getElementById('message-input');
+      var user = $(event.target).data('user');
       var message = $(event.target).data('message');
-      messageInput.value = "@" + $(event.target).data('user') + ':\n' + ( message ? '>' + message + '\n' : "" ) + messageInput.value;
+      messageInput.value = "@" + user + ':\n' + ( message ? '>' + message + '\n' : "" ) + messageInput.value;
       messageInput.focus();
       $('#message-input').trigger("autosize").trigger("autosize-resize");
     });
