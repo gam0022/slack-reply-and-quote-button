@@ -1,5 +1,4 @@
 document.body.appendChild(function() {
-  var script = document.createElement("script");
 
   var code = function() {
     var originalBuildMsgHTML = TS.templates.builders.buildMsgHTML;
@@ -62,8 +61,8 @@ document.body.appendChild(function() {
     });
   };
 
-  src = "(" + code.toString() + ")()";
+  var script = document.createElement("script");
   script.type = "text/javascript";
-  script.text = src;
+  script.text = "(" + code.toString() + ")()";
   return script;
 }());
