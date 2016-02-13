@@ -14,7 +14,7 @@ document.body.appendChild(function() {
       // Quote Button
       var refUrl = msgContent.children('a.timestamp').attr("href");
       var quoteButton = $('<a data-action="quote" class="ts_icon_quote ' + buttonClass + '" data-refurl="' + refUrl + '"><span class="ts_tip_tip">Quote</span></a>');
-      quoteButton = container.find('[data-action="copy_link"]').after(quoteButton);
+      container.prepend(quoteButton);
 
       // Reply Button
       var senderHref = msgContent.find("a.message_sender").attr('href');
@@ -22,7 +22,7 @@ document.body.appendChild(function() {
         var senderUser = senderHref.split('/')[2];
         var repMessage = msgContent.children("span.message_body").text();
         var replyButton = $('<a data-action="reply" class="ts_icon_reply ' + buttonClass + '" data-user="' + senderUser + '" data-repMes="' + repMessage + '"><span class="ts_tip_tip">Reply</span></a>');
-        quoteButton.after(replyButton);
+        container.prepend(replyButton);
       }
 
       return selfHtml(target);
