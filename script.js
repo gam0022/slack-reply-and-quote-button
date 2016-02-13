@@ -3,39 +3,46 @@ document.body.appendChild(function() {
     var originalBuildMsgHTML = TS.templates.builders.buildMsgHTML;
 
     TS.templates.builders.buildMsgHTML = function(O, h) {
-      var target = $(originalBuildMsgHTML(O, h));
+      var originalHTML = originalBuildMsgHTML(O, h);
+      try {
+        var target = $(originalHTML);
+        var messageContent = target.children('.message_content');
+        var container = target.children('.action_hover_container');
+        var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hide ts_tip_hidden";
 
-      var messageContent = target.children('.message_content');
-      var container = target.children('.action_hover_container');
-      var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hide ts_tip_hidden";
+        // Quote Button
+        var url = messageContent.children('a.timestamp').attr("href");
+        var quoteButton = $("<a></a>", {
+          "class": "ts_icon_quote " + buttonClass,
+          "data-action": "quote",
+          "data-url": url,
+        }).append($("<span></span>", {class: "ts_tip_tip", text: "Quote"}));
+        container.prepend(quoteButton);
 
-      // Quote Button
-      var url = messageContent.children('a.timestamp').attr("href");
-      var quoteButton = $("<a></a>", {
-        "class": "ts_icon_quote " + buttonClass,
-        "data-action": "quote",
-        "data-url": url,
-      }).append($("<span></span>", {class: "ts_tip_tip", text: "Quote"}));
-      container.prepend(quoteButton);
+        // Reply Button
+        var userURL = messageContent.find("a.message_sender").attr('href');
+        if (userURL != null) {
+          var user = userURL.split('/')[2];
+          var message = messageContent.children("span.message_body").text();
+          var replyButton = $("<a></a>", {
+            "class": "ts_icon_reply " + buttonClass,
+            "data-action": "reply",
+            "data-user": user,
+            "data-message": message,
+          }).append($("<span></span>", {class: "ts_tip_tip", text: "Reply"}));
+          container.prepend(replyButton);
+        }
 
-      // Reply Button
-      var userUrl = messageContent.find("a.message_sender").attr('href');
-      if (userUrl != null) {
-        var user = userUrl.split('/')[2];
-        var message = messageContent.children("span.message_body").text();
-        var replyButton = $("<a></a>", {
-          "class": "ts_icon_reply " + buttonClass,
-          "data-action": "reply",
-          "data-user": user,
-          "data-message": message,
-        }).append($("<span></span>", {class: "ts_tip_tip", text: "Reply"}));
-        container.prepend(replyButton);
+        return selfHTML(target);
+
+      } catch(e) {
+        console.error("SlackReplyAndQuoteButtonError.");
+        console.info(e.stack);
+        return originalHTML;
       }
-
-      return selfHtml(target);
     };
 
-    var selfHtml = function(target) {
+    var selfHTML = function(target) {
       var html = "";
       for(var i = 0, l = target.length; i < l; i++) {
         html += target[i].outerHTML
