@@ -14,7 +14,7 @@ document.body.appendChild(function() {
       // Quote Button
       var url = messageContent.children('a.timestamp').attr("href");
       var quoteButton = $("<a></a>", {
-        class: "ts_icon_quote " + buttonClass,
+        "class": "ts_icon_quote " + buttonClass,
         "data-action": "quote",
         "data-url": url,
       }).append($("<span></span>", {class: "ts_tip_tip", text: "Quote"}));
@@ -26,7 +26,7 @@ document.body.appendChild(function() {
         var user = userUrl.split('/')[2];
         var message = messageContent.children("span.message_body").text();
         var replyButton = $("<a></a>", {
-          class: "ts_icon_reply " + buttonClass,
+          "class": "ts_icon_reply " + buttonClass,
           "data-action": "reply",
           "data-user": user,
           "data-message": message,
@@ -35,7 +35,7 @@ document.body.appendChild(function() {
       }
 
       return selfHtml(target);
-    }
+    };
 
     var selfHtml = function(target) {
       var html = "";
@@ -43,9 +43,9 @@ document.body.appendChild(function() {
         html += target[i].outerHTML
       }
       return html;
-    }
+    };
 
-    $(document).on("click", '.ts_icon_quote', function(event) {
+    $(document).on("click", "[data-action='quote']", function(event) {
       var messageInput = document.getElementById('message-input');
       var url = $(event.target).data('url');
       messageInput.value += '\n' + "https://" + location.host + '/' + url;
@@ -53,17 +53,17 @@ document.body.appendChild(function() {
       $('#message-input').trigger("autosize").trigger("autosize-resize");
     });
 
-    $(document).on("click", '.ts_icon_reply', function(event) {
+    $(document).on("click", "[data-action='reply']", function(event) {
       var messageInput = document.getElementById('message-input');
       var message = $(event.target).data('message');
       messageInput.value += '@' + $(event.target).data('user') + ':\n' + ( message ? '>' + message + '\n' : "" );
       messageInput.focus();
       $('#message-input').trigger("autosize").trigger("autosize-resize");
     });
-  }
+  };
 
-  src = "(" + code.toString() + ")()"
-  script.type="text/javascript";
-  script.text=src
+  src = "(" + code.toString() + ")()";
+  script.type = "text/javascript";
+  script.text = src;
   return script;
 }());
