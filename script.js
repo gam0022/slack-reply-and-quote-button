@@ -12,25 +12,23 @@ document.body.appendChild(function() {
 
         // Quote Button
         var url = messageContent.children("a.timestamp").attr("href");
-        var quoteButton = $("<a></a>", {
+        container.prepend($("<a></a>", {
           "class": "ts_icon_quote " + buttonClass,
           "data-action": "quote",
           "data-url": url,
-        }).append($("<span></span>", {class: "ts_tip_tip", text: "Quote"}));
-        container.prepend(quoteButton);
+        }).append($("<span></span>", {class: "ts_tip_tip", text: "Quote"})));
 
         // Reply Button
         var userURL = messageContent.find("a.message_sender").attr("href");
         if (userURL != null) {
           var user = userURL.split("/")[2];
           var message = messageContent.children("span.message_body").text().replace(/\s+/g, "");
-          var replyButton = $("<a></a>", {
+          container.prepend($("<a></a>", {
             "class": "ts_icon_reply " + buttonClass,
             "data-action": "reply",
             "data-user": user,
             "data-message": message,
-          }).append($("<span></span>", {class: "ts_tip_tip", text: "Reply"}));
-          container.prepend(replyButton);
+          }).append($("<span></span>", {class: "ts_tip_tip", text: "Reply"})));
         }
 
         return selfHTML(target);
