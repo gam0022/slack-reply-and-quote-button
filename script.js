@@ -1,5 +1,4 @@
 document.body.appendChild(function() {
-
   var code = function() {
     var originalBuildMsgHTML = TS.templates.builders.buildMsgHTML;
 
@@ -55,7 +54,7 @@ document.body.appendChild(function() {
     $(document).on("click", "[data-action='reply']", function(event) {
       var messageInput = document.getElementById('message-input');
       var message = $(event.target).data('message');
-      messageInput.value += '@' + $(event.target).data('user') + ':\n' + ( message ? '>' + message + '\n' : "" );
+      messageInput.value = "@" + $(event.target).data('user') + ':\n' + ( message ? '>' + message + '\n' : "" ) + messageInput.value;
       messageInput.focus();
       $('#message-input').trigger("autosize").trigger("autosize-resize");
     });
