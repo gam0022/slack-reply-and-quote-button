@@ -23,7 +23,7 @@ document.body.appendChild(function() {
         var userURL = messageContent.find("a.message_sender").attr("href");
         if (userURL != null) {
           var user = userURL.split("/")[2];
-          var message = messageContent.children("span.message_body").text();
+          var message = messageContent.children("span.message_body").text().replace(/\s+/g, "");
           var replyButton = $("<a></a>", {
             "class": "ts_icon_reply " + buttonClass,
             "data-action": "reply",
