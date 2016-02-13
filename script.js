@@ -2,16 +2,13 @@ document.body.appendChild(function() {
   var script = document.createElement("script");
 
   var code = function() {
-    originalBuildMsgHTML = TS.templates.builders.buildMsgHTML;
-    TS.templates.builders.buildMsgHTML = function(O, h) {
-      var target = originalBuildMsgHTML(O, h);
-      if (!$(target)[0].id.startsWith('msg_')) {
-        return target;
-      }
+    var originalBuildMsgHTML = TS.templates.builders.buildMsgHTML;
 
-      var msg = $(target);
-      var msgContent = msg.children('.message_content');
-      var container = msg.children('.action_hover_container');
+    TS.templates.builders.buildMsgHTML = function(O, h) {
+      var target = $(originalBuildMsgHTML(O, h));
+
+      var msgContent = target.children('.message_content');
+      var container = target.children('.action_hover_container');
       var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hide ts_tip_hidden";
 
       // Quote Button
@@ -26,7 +23,15 @@ document.body.appendChild(function() {
       var replyButton = $('<a data-action="reply" class="' + buttonClass + '" data-user="' + senderUser + '" data-repMes="' + repMessage + '" onclick="onReplyClick(this)"><span class="ts_tip_tip">Reply</span>Re</a>');
       quoteButton.after(replyButton);
 
-      return msg[0].outerHTML;
+      return selfHtml(target);
+    }
+
+    var selfHtml = function(target) {
+      var html = "";
+      for(var i = 0, l = target.length; i < l; i++) {
+        html += target[i].outerHTML
+      }
+      return html;
     }
 
     onQuoteClick = function(target) {
