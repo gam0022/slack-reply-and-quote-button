@@ -7,21 +7,21 @@ document.body.appendChild(function() {
     TS.templates.builders.buildMsgHTML = function(O, h) {
       var target = $(originalBuildMsgHTML(O, h));
 
-      var msgContent = target.children('.message_content');
+      var messageContent = target.children('.message_content');
       var container = target.children('.action_hover_container');
       var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hide ts_tip_hidden";
 
       // Quote Button
-      var refUrl = msgContent.children('a.timestamp').attr("href");
-      var quoteButton = $('<a data-action="quote" class="ts_icon_quote ' + buttonClass + '" data-refurl="' + refUrl + '"><span class="ts_tip_tip">Quote</span></a>');
+      var url = messageContent.children('a.timestamp').attr("href");
+      var quoteButton = $('<a data-action="quote" class="ts_icon_quote ' + buttonClass + '" data-url="' + url + '"><span class="ts_tip_tip">Quote</span></a>');
       container.prepend(quoteButton);
 
       // Reply Button
-      var senderHref = msgContent.find("a.message_sender").attr('href');
-      if (senderHref != null) {
-        var senderUser = senderHref.split('/')[2];
-        var repMessage = msgContent.children("span.message_body").text();
-        var replyButton = $('<a data-action="reply" class="ts_icon_reply ' + buttonClass + '" data-user="' + senderUser + '" data-repMes="' + repMessage + '"><span class="ts_tip_tip">Reply</span></a>');
+      var userUrl = messageContent.find("a.message_sender").attr('href');
+      if (userUrl != null) {
+        var user = userUrl.split('/')[2];
+        var message = messageContent.children("span.message_body").text();
+        var replyButton = $('<a data-action="reply" class="ts_icon_reply ' + buttonClass + '" data-user="' + user + '" data-message="' + message + '"><span class="ts_tip_tip">Reply</span></a>');
         container.prepend(replyButton);
       }
 
@@ -38,14 +38,16 @@ document.body.appendChild(function() {
 
     $(document).on("click", '.ts_icon_quote', function(event) {
       var messageInput = document.getElementById('message-input');
-      messageInput.value += '\n' + "https://" + location.host + '/' + $(event.target).data('refurl');
+      var url = $(event.target).data('url');
+      messageInput.value += '\n' + "https://" + location.host + '/' + url;
       messageInput.focus();
       $('#message-input').trigger("autosize").trigger("autosize-resize");
     });
 
     $(document).on("click", '.ts_icon_reply', function(event) {
       var messageInput = document.getElementById('message-input');
-      messageInput.value += '@' + $(event.target).data('user') + ':\n' + ( $(event.target).data('repmes') ? ( '>' + $(event.target).data('repmes') + '\n' ) : "" );
+      var message = $(event.target).data('message');
+      messageInput.value += '@' + $(event.target).data('user') + ':\n' + ( message ? '>' + message + '\n' : "" );
       messageInput.focus();
       $('#message-input').trigger("autosize").trigger("autosize-resize");
     });
