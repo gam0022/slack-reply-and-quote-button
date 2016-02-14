@@ -11,11 +11,11 @@ document.body.appendChild(function() {
         var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hidden";
 
         // Quote Button
-        var url = messageContent.children("a.timestamp").attr("href");
+        var permalink = messageContent.find("[data-action='copy_link']").data("permalink");
         container.prepend($("<a></a>", {
           "class": "ts_icon_quote " + buttonClass,
           "data-action": "quote",
-          "data-url": url,
+          "data-permalink": permalink,
         }).append($("<span></span>", {class: "ts_tip_tip", text: "Quote"})));
 
         // Reply Button
@@ -50,8 +50,8 @@ document.body.appendChild(function() {
 
     $(document).on("click", "[data-action='quote']", function(event) {
       var messageInput = document.getElementById("message-input");
-      var url = $(event.target).data("url");
-      messageInput.value += "\n" + "https://" + location.host + url;
+      var permalink = $(event.target).data("permalink");
+      messageInput.value += "\n" + permalink;
       messageInput.focus();
       $("#message-input").trigger("autosize").trigger("autosize-resize");
     });
