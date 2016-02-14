@@ -11,7 +11,7 @@ document.body.appendChild(function() {
         var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hidden";
 
         // Quote Button
-        var permalink = messageContent.find("[data-action='copy_link']").data("permalink");
+        var permalink = container.children("[data-action='copy_link']").data("permalink");
         container.prepend($("<a></a>", {
           "class": "ts_icon_quote " + buttonClass,
           "data-action": "quote",
