@@ -6,8 +6,8 @@ document.body.appendChild(function() {
       var originalHTML = originalBuildMsgHTML(O, h);
       try {
         var target = $(originalHTML);
-        var messageContent = target.children(".message_content");
         var container = target.children(".action_hover_container");
+        var messageContent = target.children(".message_content");
         var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hidden";
 
         // Quote Button
@@ -19,7 +19,7 @@ document.body.appendChild(function() {
         }).append($("<span></span>", {class: "ts_tip_tip", text: "Quote"})));
 
         // Reply Button
-        var userURL = messageContent.find("a.message_sender").attr("href");
+        var userURL = messageContent.children("a.message_sender").attr("href");
         if (userURL != null) {
           var user = userURL.split("/")[2];
           var message = messageContent.children("span.message_body").text().replace(/\s+/g, "");
