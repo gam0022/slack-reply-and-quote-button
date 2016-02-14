@@ -8,7 +8,7 @@ document.body.appendChild(function() {
         var target = $(originalHTML);
         var messageContent = target.children(".message_content");
         var container = target.children(".action_hover_container");
-        var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hide ts_tip_hidden";
+        var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hidden";
 
         // Quote Button
         var url = messageContent.children("a.timestamp").attr("href");
