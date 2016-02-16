@@ -1,7 +1,7 @@
 # Slack返信引用ボタン Slack Reply and Quote Button
 Slack に返信と引用ボタンをつけるChrome拡張です。
 
-Chrome extension that adds a Reply(mention) and Quotation button to Slack.
+a Chrome extension that adds a Reply(mention) and Quotation button to Slack.
 
 ![スクリーンショット](ss.png)
 
