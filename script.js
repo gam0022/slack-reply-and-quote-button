@@ -66,8 +66,7 @@ document.body.appendChild(function() {
       var messageInput = document.getElementById("message-input");
       var user = $(event.target).data("user");
       var targetMessage = $(event.target).data("message");
-      var regex = new RegExp(selectedString, "");
-      var isContains = targetMessage.match(regex);
+      var isContains = targetMessage.match(new RegExp(selectedString, ""));
       var message = (selectedString && isContains) ? selectedString : targetMessage;
       messageInput.value = "@" + user + ":\n" + ( message ? ">" + message + "\n" : "" ) + messageInput.value;
       messageInput.focus();
