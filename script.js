@@ -1,5 +1,6 @@
 document.body.appendChild(function() {
   var code = function() {
+    var selectString='';
     var originalBuildMsgHTML = TS.templates.builders.buildMsgHTML;
 
     TS.templates.builders.buildMsgHTML = function(O, h) {
@@ -56,10 +57,18 @@ document.body.appendChild(function() {
       $("#message-input").trigger("autosize").trigger("autosize-resize");
     });
 
+    $(document).on("mousedown", "[data-action='reply']", function(event) {
+        selectString = document.getSelection().toString();
+        console.info(selectString);
+    });
+
     $(document).on("click", "[data-action='reply']", function(event) {
       var messageInput = document.getElementById("message-input");
       var user = $(event.target).data("user");
-      var message = $(event.target).data("message");
+      var targetMessage = $(event.target).data("message");
+      var regex = new RegExp(selectString, "");
+      var iscontains = targetMessage.match(regex);
+      var message = (selectString && iscontains) ? selectString : targetMessage;
       messageInput.value = "@" + user + ":\n" + ( message ? ">" + message + "\n" : "" ) + messageInput.value;
       messageInput.focus();
       $("#message-input").trigger("autosize").trigger("autosize-resize");
