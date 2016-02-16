@@ -1,10 +1,12 @@
 document.body.appendChild(function() {
   var code = function() {
-    var selectedString='';
-    var originalBuildMsgHTML = TS.templates.builders.buildMsgHTML;
+    var replyAndQuoteButton = {
+      originalBuildMsgHTML: TS.templates.builders.buildMsgHTML,
+      selectedString: '',
+    };
 
     TS.templates.builders.buildMsgHTML = function(O, h) {
-      var originalHTML = originalBuildMsgHTML(O, h);
+      var originalHTML = replyAndQuoteButton.originalBuildMsgHTML(O, h);
       try {
         var target = $(originalHTML);
         var container = target.children(".action_hover_container");
@@ -58,14 +60,16 @@ document.body.appendChild(function() {
     });
 
     $(document).on("mousedown", "[data-action='reply']", function(event) {
-        selectedString = document.getSelection().toString();
+        var selectedString = document.getSelection().toString();
         console.info(selectedString);
+        replyAndQuoteButton.selectedString = selectedString;
     });
 
     $(document).on("click", "[data-action='reply']", function(event) {
       var messageInput = document.getElementById("message-input");
       var user = $(event.target).data("user");
       var targetMessage = $(event.target).data("message");
+      var selectedString = replyAndQuoteButton.selectedString;
       var isContains = targetMessage.match(new RegExp(selectedString, ""));
       var message = (selectedString && isContains) ? selectedString : targetMessage;
       messageInput.value = "@" + user + ":\n" + ( message ? ">" + message + "\n" : "" ) + messageInput.value;
