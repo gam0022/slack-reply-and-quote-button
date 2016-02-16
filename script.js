@@ -1,9 +1,12 @@
 document.body.appendChild(function() {
   var code = function() {
-    var originalBuildMsgHTML = TS.templates.builders.buildMsgHTML;
+    var replyAndQuoteButton = {
+      originalBuildMsgHTML: TS.templates.builders.buildMsgHTML,
+      selectedString: '',
+    };
 
     TS.templates.builders.buildMsgHTML = function(O, h) {
-      var originalHTML = originalBuildMsgHTML(O, h);
+      var originalHTML = replyAndQuoteButton.originalBuildMsgHTML(O, h);
       try {
         var target = $(originalHTML);
         var container = target.children(".action_hover_container");
@@ -56,10 +59,19 @@ document.body.appendChild(function() {
       $("#message-input").trigger("autosize").trigger("autosize-resize");
     });
 
+    $(document).on("mousedown", "[data-action='reply']", function(event) {
+        var selectedString = document.getSelection().toString();
+        console.info(selectedString);
+        replyAndQuoteButton.selectedString = selectedString;
+    });
+
     $(document).on("click", "[data-action='reply']", function(event) {
       var messageInput = document.getElementById("message-input");
       var user = $(event.target).data("user");
-      var message = $(event.target).data("message");
+      var targetMessage = $(event.target).data("message");
+      var selectedString = replyAndQuoteButton.selectedString;
+      var isContains = targetMessage.match(new RegExp(selectedString, ""));
+      var message = (selectedString && isContains) ? selectedString : targetMessage;
       messageInput.value = "@" + user + ":\n" + ( message ? ">" + message + "\n" : "" ) + messageInput.value;
       messageInput.focus();
       $("#message-input").trigger("autosize").trigger("autosize-resize");
