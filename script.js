@@ -2,7 +2,7 @@ document.body.appendChild(function() {
   var code = function() {
     var replyAndQuoteButton = {
       originalBuildMsgHTML: TS.templates.builders.buildMsgHTML,
-      selectedString: '',
+      selectedText: '',
     };
 
     TS.templates.builders.buildMsgHTML = function(O, h) {
@@ -12,9 +12,9 @@ document.body.appendChild(function() {
         var container = target.children(".action_hover_container");
         var messageContent = target.children(".message_content");
         var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hidden";
+        var permalink = container.children("[data-action='copy_link']").data("permalink");
 
         // Quote Button
-        var permalink = container.children("[data-action='copy_link']").data("permalink");
         container.prepend($("<a></a>", {
           "class": "ts_icon_quote " + buttonClass,
           "data-action": "quote",
@@ -31,6 +31,7 @@ document.body.appendChild(function() {
             "data-action": "reply",
             "data-user": user,
             "data-message": message,
+            "data-permalink": permalink,
           }).append($("<span></span>", {class: "ts_tip_tip", text: "Reply"})));
         }
 
@@ -51,6 +52,24 @@ document.body.appendChild(function() {
       return html;
     };
 
+    var quoteText = function(text) {
+      // TODO: (edited) を正規表現で取り除いているのを正攻法に置き換える
+      return "> " + text.replace(/\(edited\)$/g, "").replace(/\n/g, "\n> ") + "\n";
+    }
+
+    var getQuotedText = function(messageText, selectedText, permalink) {
+      if (selectedText !== "") {
+        return quoteText(selectedText);
+      } else {
+        var lineCount = messageText.split("\n").length;
+        if (lineCount <= 3) {
+          return quoteText(messageText);
+        } else {
+          return permalink + "\n";
+        }
+      }
+    }
+
     $(document).on("click", "[data-action='quote']", function(event) {
       var messageInput = document.getElementById("message-input");
       var permalink = $(event.target).data("permalink");
@@ -60,18 +79,18 @@ document.body.appendChild(function() {
     });
 
     $(document).on("mousedown", "[data-action='reply']", function(event) {
-        var selectedString = document.getSelection().toString();
-        console.info(selectedString);
-        replyAndQuoteButton.selectedString = selectedString;
+        var selectedText = document.getSelection().toString();
+        console.info(selectedText);
+        replyAndQuoteButton.selectedText = selectedText;
     });
 
     $(document).on("click", "[data-action='reply']", function(event) {
       var messageInput = document.getElementById("message-input");
       var user = $(event.target).data("user");
-      var targetMessage = $(event.target).data("message");
-      var selectedString = replyAndQuoteButton.selectedString;
-      var message = (selectedString !== "") ? selectedString : targetMessage;
-      messageInput.value = "@" + user + ":\n" + ( message ? ">" + message + "\n" : "" ) + messageInput.value;
+      var permalink = $(event.target).data("permalink");
+      var messageText = $(event.target).data("message");
+      var selectedText = replyAndQuoteButton.selectedText;
+      messageInput.value = "@" + user + ":\n" +  getQuotedText(messageText, selectedText, permalink) + messageInput.value;
       messageInput.focus();
       $("#message-input").trigger("autosize").trigger("autosize-resize");
     });
