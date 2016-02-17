@@ -13,8 +13,7 @@ document.body.appendChild(function() {
       },
 
       quoteText: function(text) {
-        // TODO: (edited) を正規表現で取り除いているのを正攻法に置き換える
-        return "> " + text.replace(/\(edited\)$/g, "").replace(/\n/g, "\n> ");
+        return "> " + text.replace(/\n/g, "\n> ");
       },
 
       getQuotedText: function(messageText, selectedText, permalink) {
@@ -22,7 +21,8 @@ document.body.appendChild(function() {
           return replyAndQuoteButton.quoteText(selectedText);
         } else {
           var lineCount = messageText.split("\n").length;
-          if (lineCount <= 3) {
+          // 行数が3以下かつタグが含まれていない場合は > による引用にする
+          if (lineCount <= 3 && (messageText.indexOf("</div>") === -1) && (messageText.indexOf("</span>") === -1)) {
             return replyAndQuoteButton.quoteText(messageText);
           } else {
             return permalink;
@@ -51,7 +51,7 @@ document.body.appendChild(function() {
         var userURL = messageContent.children("a.message_sender").attr("href");
         if (userURL != null) {
           var user = userURL.split("/")[2];
-          var message = messageContent.children("span.message_body").text().trim();
+          var message = messageContent.children("span.message_body").html().replace(/<br>/g, "\n");
           container.prepend($("<a></a>", {
             "class": "ts_icon_reply " + buttonClass,
             "data-action": "reply",

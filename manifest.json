@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Slack返信引用ボタン Slack Reply and Quote Button",
   "description": "Slack に返信と引用ボタンをつけます。 Add a reply(mention) and quotation button to Slack.",
-  "version" : "1.1.2.0",
+  "version" : "1.1.2.1",
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
