@@ -13,7 +13,7 @@ document.body.appendChild(function() {
       },
 
       quoteText: function(text) {
-        return "> " + text.replace(/\n/g, "\n> ");
+        return "> " + text.replace(/\n/g, "\n> ").replace(/<.+?>/g, "");
       },
 
       getQuotedText: function(messageText, selectedText, permalink) {
