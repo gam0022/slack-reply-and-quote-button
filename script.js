@@ -14,7 +14,7 @@ document.body.appendChild(function() {
 
       quoteText: function(text) {
         // TODO: (edited) を正規表現で取り除いているのを正攻法に置き換える
-        return "> " + text.replace(/\(edited\)$/g, "").replace(/\n/g, "\n> ") + "\n";
+        return "> " + text.replace(/\(edited\)$/g, "").replace(/\n/g, "\n> ");
       },
 
       getQuotedText: function(messageText, selectedText, permalink) {
@@ -25,7 +25,7 @@ document.body.appendChild(function() {
           if (lineCount <= 3) {
             return replyAndQuoteButton.quoteText(messageText);
           } else {
-            return permalink + "\n";
+            return permalink;
           }
         }
       },
@@ -70,17 +70,22 @@ document.body.appendChild(function() {
       }
     };
 
+    $(document).on("mousedown", "[data-action='quote']", function(event) {
+        var selectedText = document.getSelection().toString();
+        replyAndQuoteButton.selectedText = selectedText;
+    });
+
     $(document).on("click", "[data-action='quote']", function(event) {
       var messageInput = document.getElementById("message-input");
       var permalink = $(event.target).data("permalink");
-      messageInput.value += "\n" + permalink;
+      var selectedText = replyAndQuoteButton.selectedText;
+      messageInput.value += "\n" + (selectedText !== "" ? replyAndQuoteButton.quoteText(selectedText) : permalink);
       messageInput.focus();
       $("#message-input").trigger("autosize").trigger("autosize-resize");
     });
 
     $(document).on("mousedown", "[data-action='reply']", function(event) {
         var selectedText = document.getSelection().toString();
-        console.info(selectedText);
         replyAndQuoteButton.selectedText = selectedText;
     });
 
@@ -90,7 +95,7 @@ document.body.appendChild(function() {
       var permalink = $(event.target).data("permalink");
       var messageText = $(event.target).data("message");
       var selectedText = replyAndQuoteButton.selectedText;
-      messageInput.value = "@" + user + ":\n" +  replyAndQuoteButton.getQuotedText(messageText, selectedText, permalink) + messageInput.value;
+      messageInput.value = "@" + user + ":\n" +  replyAndQuoteButton.getQuotedText(messageText, selectedText, permalink) + "\n" + messageInput.value;
       messageInput.focus();
       $("#message-input").trigger("autosize").trigger("autosize-resize");
     });
