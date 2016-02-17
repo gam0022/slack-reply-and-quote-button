@@ -3,6 +3,32 @@ document.body.appendChild(function() {
     var replyAndQuoteButton = {
       originalBuildMsgHTML: TS.templates.builders.buildMsgHTML,
       selectedText: '',
+
+      selfHTML: function(target) {
+        var html = "";
+        for(var i = 0, l = target.length; i < l; i++) {
+          html += target[i].outerHTML
+        }
+        return html;
+      },
+
+      quoteText: function(text) {
+        // TODO: (edited) を正規表現で取り除いているのを正攻法に置き換える
+        return "> " + text.replace(/\(edited\)$/g, "").replace(/\n/g, "\n> ") + "\n";
+      },
+
+      getQuotedText: function(messageText, selectedText, permalink) {
+        if (selectedText !== "") {
+          return replyAndQuoteButton.quoteText(selectedText);
+        } else {
+          var lineCount = messageText.split("\n").length;
+          if (lineCount <= 3) {
+            return replyAndQuoteButton.quoteText(messageText);
+          } else {
+            return permalink + "\n";
+          }
+        }
+      },
     };
 
     TS.templates.builders.buildMsgHTML = function(O, h) {
@@ -35,7 +61,7 @@ document.body.appendChild(function() {
           }).append($("<span></span>", {class: "ts_tip_tip", text: "Reply"})));
         }
 
-        return selfHTML(target);
+        return replyAndQuoteButton.selfHTML(target);
 
       } catch(e) {
         console.error("SlackReplyAndQuoteButtonError.");
@@ -43,32 +69,6 @@ document.body.appendChild(function() {
         return originalHTML;
       }
     };
-
-    var selfHTML = function(target) {
-      var html = "";
-      for(var i = 0, l = target.length; i < l; i++) {
-        html += target[i].outerHTML
-      }
-      return html;
-    };
-
-    var quoteText = function(text) {
-      // TODO: (edited) を正規表現で取り除いているのを正攻法に置き換える
-      return "> " + text.replace(/\(edited\)$/g, "").replace(/\n/g, "\n> ") + "\n";
-    }
-
-    var getQuotedText = function(messageText, selectedText, permalink) {
-      if (selectedText !== "") {
-        return quoteText(selectedText);
-      } else {
-        var lineCount = messageText.split("\n").length;
-        if (lineCount <= 3) {
-          return quoteText(messageText);
-        } else {
-          return permalink + "\n";
-        }
-      }
-    }
 
     $(document).on("click", "[data-action='quote']", function(event) {
       var messageInput = document.getElementById("message-input");
@@ -90,7 +90,7 @@ document.body.appendChild(function() {
       var permalink = $(event.target).data("permalink");
       var messageText = $(event.target).data("message");
       var selectedText = replyAndQuoteButton.selectedText;
-      messageInput.value = "@" + user + ":\n" +  getQuotedText(messageText, selectedText, permalink) + messageInput.value;
+      messageInput.value = "@" + user + ":\n" +  replyAndQuoteButton.getQuotedText(messageText, selectedText, permalink) + messageInput.value;
       messageInput.focus();
       $("#message-input").trigger("autosize").trigger("autosize-resize");
     });
