@@ -70,8 +70,7 @@ document.body.appendChild(function() {
       var user = $(event.target).data("user");
       var targetMessage = $(event.target).data("message");
       var selectedString = replyAndQuoteButton.selectedString;
-      var isContains = targetMessage.match(new RegExp(selectedString, ""));
-      var message = (selectedString && isContains) ? selectedString : targetMessage;
+      var message = (selectedString !== "") ? selectedString : targetMessage;
       messageInput.value = "@" + user + ":\n" + ( message ? ">" + message + "\n" : "" ) + messageInput.value;
       messageInput.focus();
       $("#message-input").trigger("autosize").trigger("autosize-resize");
