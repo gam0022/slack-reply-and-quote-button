@@ -47,9 +47,9 @@ document.body.appendChild(function() {
           "data-permalink": permalink,
         }).append($("<span></span>", {class: "ts_tip_tip", text: "Quote"})));
 
-        // Reply Button
         var userURL = messageContent.children("a.message_sender").attr("href");
         if (userURL != null) {
+          // Reply Button
           var user = userURL.split("/")[2];
           var message = messageContent.children("span.message_body").html().replace(/<br>/g, "\n");
           container.prepend($("<a></a>", {
@@ -59,6 +59,13 @@ document.body.appendChild(function() {
             "data-message": message,
             "data-permalink": permalink,
           }).append($("<span></span>", {class: "ts_tip_tip", text: "Reply"})));
+
+          // Mention Button
+          container.prepend($("<a></a>", {
+            "class": "ts_icon_mentions " + buttonClass,
+            "data-action": "mention",
+            "data-user": user,
+          }).append($("<span></span>", {class: "ts_tip_tip", text: "Mention"})));
         }
 
         return replyAndQuoteButton.selfHTML(target);
@@ -96,6 +103,14 @@ document.body.appendChild(function() {
       var messageText = $(event.target).data("message");
       var selectedText = replyAndQuoteButton.selectedText;
       messageInput.value = "@" + user + ":\n" +  replyAndQuoteButton.getQuotedText(messageText, selectedText, permalink) + "\n" + messageInput.value;
+      messageInput.focus();
+      $("#message-input").trigger("autosize").trigger("autosize-resize");
+    });
+
+    $(document).on("click", "[data-action='mention']", function(event) {
+      var messageInput = document.getElementById("message-input");
+      var user = $(event.target).data("user");
+      messageInput.value = "@" + user + ":\n" + messageInput.value;
       messageInput.focus();
       $("#message-input").trigger("autosize").trigger("autosize-resize");
     });
