@@ -87,7 +87,11 @@ document.body.appendChild(function() {
       var permalink = $(event.target).data("permalink");
       var selectedText = replyAndQuoteButton.selectedText;
       messageInput.value += "\n" + (selectedText !== "" ? replyAndQuoteButton.quoteText(selectedText) : permalink);
+
       messageInput.focus();
+      messageInput.selectionStart = 0;
+      messageInput.selectionEnd = 0;
+
       $("#message-input").trigger("autosize").trigger("autosize-resize");
     });
 
