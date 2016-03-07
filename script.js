@@ -22,7 +22,7 @@ document.body.appendChild(function() {
         } else {
           var lineCount = messageText.split("\n").length;
           // 行数が3以下かつタグが含まれていない場合は > による引用にする
-          if (lineCount <= 3 && (messageText.indexOf("</div>") === -1) && (messageText.indexOf("</span>") === -1)) {
+          if (messageText != "" && lineCount <= 3 && (messageText.indexOf("</div>") === -1) && (messageText.indexOf("</span>") === -1)) {
             return replyAndQuoteButton.quoteText(messageText);
           } else {
             return permalink;
@@ -51,7 +51,8 @@ document.body.appendChild(function() {
         if (userURL != null) {
           // Reply Button
           var user = userURL.split("/")[2];
-          var message = messageContent.children("span.message_body").html().replace(/<br>/g, "\n");
+          var rawMessage = messageContent.children("span.message_body").html();
+          var message = rawMessage ? rawMessage.replace(/<br>/g, "\n") : "";
           container.prepend($("<a></a>", {
             "class": "ts_icon_reply " + buttonClass,
             "data-action": "reply",
@@ -73,6 +74,7 @@ document.body.appendChild(function() {
       } catch(e) {
         console.error("SlackReplyAndQuoteButtonError.");
         console.info(e.stack);
+        console.log("url: " + permalink);
         return originalHTML;
       }
     };
