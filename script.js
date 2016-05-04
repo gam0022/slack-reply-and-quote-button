@@ -1,7 +1,6 @@
 document.body.appendChild(function() {
   var code = function() {
     var replyAndQuoteButton = {
-      originalBuildMsgHTML: TS.templates.builders.buildMsgHTML,
       selectedText: '',
 
       selfHTML: function(target) {
@@ -31,13 +30,36 @@ document.body.appendChild(function() {
       },
     };
 
-    TS.templates.builders.buildMsgHTML = function(O, h) {
-      var originalHTML = replyAndQuoteButton.originalBuildMsgHTML(O, h);
+    TS.ui.messages.updateMessageHoverContainer = function($msg) {
+      $msg.removeClass("dirty_hover_container");
+      var model_ob_id = $msg.data("model-ob-id");
+      var model_ob = model_ob_id ? TS.shared.getModelObById(model_ob_id) : TS.shared.getActiveModelOb();
+      var msg_ts = $msg.data("ts");
+      var msg = TS.utility.msgs.getMsg(msg_ts, model_ob.msgs);
+      if (!msg && model_ob._archive_msgs)
+        msg = TS.utility.msgs.getMsg(msg_ts, model_ob._archive_msgs);
+      if (!msg) {
+        TS.error(msg_ts + " not found in " + model_ob_id);
+        return
+      }
+      var rxn_key = TS.rxns.getRxnKeyByMsgType(msg);
+      var $ahc = $msg.find(".action_hover_container");
+      $ahc.html(TS.templates.action_hover_items({
+        msg: msg,
+        actions: TS.utility.msgs.getMsgActions(msg, model_ob),
+        default_rxns: TS.boot_data.feature_thanks && !TS.rxns.getExistingRxnsByKey(rxn_key) && TS.emoji.getDefaultRxns(),
+        ts_tip_delay_class: "ts_tip_delay_60",
+        show_rxn_action: !!$ahc.data("show_rxn_action"),
+        show_reply_action: !!$ahc.data("show_reply_action"),
+        show_jump_action: !!$ahc.data("show_jump_action"),
+        show_comment_action: !!$ahc.data("show_comment_action"),
+        abs_permalink: $ahc.data("abs_permalink")
+      }))
+
       try {
-        var target = $(originalHTML);
-        var container = target.children(".action_hover_container");
-        var messageContent = target.children(".message_content");
-        var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_600 ts_tip_hidden";
+        var container = $msg.children("div.action_hover_container");
+        var messageContent = $msg.children(".message_content");
+        var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_60";
         var permalink = container.children("[data-action='copy_link']").data("permalink");
 
         // Quote Button
@@ -68,9 +90,6 @@ document.body.appendChild(function() {
             "data-user": user,
           }).append($("<span></span>", {class: "ts_tip_tip", text: "Mention"})));
         }
-
-        return replyAndQuoteButton.selfHTML(target);
-
       } catch(e) {
         console.error("SlackReplyAndQuoteButtonError.");
         console.info(e.stack);
@@ -80,8 +99,8 @@ document.body.appendChild(function() {
     };
 
     $(document).on("mousedown", "[data-action='quote']", function(event) {
-        var selectedText = document.getSelection().toString();
-        replyAndQuoteButton.selectedText = selectedText;
+      var selectedText = document.getSelection().toString();
+      replyAndQuoteButton.selectedText = selectedText;
     });
 
     $(document).on("click", "[data-action='quote']", function(event) {
@@ -98,8 +117,8 @@ document.body.appendChild(function() {
     });
 
     $(document).on("mousedown", "[data-action='reply']", function(event) {
-        var selectedText = document.getSelection().toString();
-        replyAndQuoteButton.selectedText = selectedText;
+      var selectedText = document.getSelection().toString();
+      replyAndQuoteButton.selectedText = selectedText;
     });
 
     $(document).on("click", "[data-action='reply']", function(event) {
