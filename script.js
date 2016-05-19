@@ -57,13 +57,12 @@ document.body.appendChild(function() {
       }))
 
       try {
-        var container = $msg.children("div.action_hover_container");
         var messageContent = $msg.children(".message_content");
         var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_60";
-        var permalink = container.children("[data-action='copy_link']").data("permalink");
+        var permalink = $ahc.data("abs_permalink");
 
         // Quote Button
-        container.prepend($("<a></a>", {
+        $ahc.prepend($("<a></a>", {
           "class": "ts_icon_quote " + buttonClass,
           "data-action": "quote",
           "data-permalink": permalink,
@@ -75,7 +74,7 @@ document.body.appendChild(function() {
           var user = userURL.split("/")[2];
           var rawMessage = messageContent.children("span.message_body").html();
           var message = rawMessage ? rawMessage.replace(/<br>/g, "\n") : "";
-          container.prepend($("<a></a>", {
+          $ahc.prepend($("<a></a>", {
             "class": "ts_icon_reply " + buttonClass,
             "data-action": "reply",
             "data-user": user,
@@ -84,7 +83,7 @@ document.body.appendChild(function() {
           }).append($("<span></span>", {class: "ts_tip_tip", text: "Reply"})));
 
           // Mention Button
-          container.prepend($("<a></a>", {
+          $ahc.prepend($("<a></a>", {
             "class": "ts_icon_mentions " + buttonClass,
             "data-action": "mention",
             "data-user": user,
