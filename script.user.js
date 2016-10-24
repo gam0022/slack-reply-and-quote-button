@@ -1,3 +1,15 @@
+// ==UserScript==
+// // @name         slack-reply-and-quote-button
+// // @namespace    http://gam0022.net/
+// // @version      1.3.0.0
+// // @description  Add a reply(mention) and quotation button to Slack.
+// // @author       gam0022
+// // @match        http://*.slack.com/*
+// // @match        https://*.slack.com/*
+// // @run-at       document-end
+// // @grant        none
+// // ==/UserScript==
+
 document.body.appendChild(function() {
   var code = function() {
     var replyAndQuoteButton = {
