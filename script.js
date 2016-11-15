@@ -68,7 +68,7 @@ document.body.appendChild(function() {
           "data-permalink": permalink,
         }).append($("<span></span>", {class: "ts_tip_tip", text: "Quote"})));
 
-        var userURL = messageContent.children("a.message_sender").attr("href");
+        var userURL = messageContent.find("a.member_preview_link").attr("href");
         if (userURL != null) {
           // Reply Button
           var user = userURL.split("/")[2];
