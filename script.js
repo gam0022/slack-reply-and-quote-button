@@ -75,7 +75,7 @@ document.body.appendChild(function() {
           var rawMessage = messageContent.children("span.message_body").html();
           var message = rawMessage ? rawMessage.replace(/<br>/g, "\n") : "";
           $ahc.prepend($("<a></a>", {
-            "class": "ts_icon_reply " + buttonClass,
+            "class": "ts_icon_share_filled " + buttonClass,
             "data-action": "reply",
             "data-user": user,
             "data-message": message,
