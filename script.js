@@ -103,7 +103,7 @@ document.body.appendChild(function() {
     });
 
     $(document).on("click", "[data-action='quote']", function(event) {
-      var messageInput = document.getElementById("message-input");
+      var messageInput = document.getElementById("msg_input");
       var permalink = $(event.target).data("permalink");
       var selectedText = replyAndQuoteButton.selectedText;
       messageInput.value += "\n" + (selectedText !== "" ? replyAndQuoteButton.quoteText(selectedText) : permalink);
@@ -112,7 +112,7 @@ document.body.appendChild(function() {
       messageInput.selectionStart = 0;
       messageInput.selectionEnd = 0;
 
-      $("#message-input").trigger("autosize").trigger("autosize-resize");
+      $("#msg_input").trigger("autosize").trigger("autosize-resize");
     });
 
     $(document).on("mousedown", "[data-action='reply']", function(event) {
@@ -121,22 +121,22 @@ document.body.appendChild(function() {
     });
 
     $(document).on("click", "[data-action='reply']", function(event) {
-      var messageInput = document.getElementById("message-input");
+      var messageInput = document.getElementById("msg_input");
       var user = $(event.target).data("user");
       var permalink = $(event.target).data("permalink");
       var messageText = $(event.target).data("message");
       var selectedText = replyAndQuoteButton.selectedText;
       messageInput.value = "@" + user + ":\n" +  replyAndQuoteButton.getQuotedText(messageText, selectedText, permalink) + "\n" + messageInput.value;
       messageInput.focus();
-      $("#message-input").trigger("autosize").trigger("autosize-resize");
+      $("#msg_input").trigger("autosize").trigger("autosize-resize");
     });
 
     $(document).on("click", "[data-action='mention']", function(event) {
-      var messageInput = document.getElementById("message-input");
+      var messageInput = document.getElementById("msg_input");
       var user = $(event.target).data("user");
       messageInput.value = "@" + user + ":\n" + messageInput.value;
       messageInput.focus();
-      $("#message-input").trigger("autosize").trigger("autosize-resize");
+      $("#msg_input").trigger("autosize").trigger("autosize-resize");
     });
   };
 
