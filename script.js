@@ -58,11 +58,12 @@ document.body.appendChild(function() {
 
       try {
         var messageContent = $msg.children(".message_content");
-        var buttonClass = "ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_60";
+        var buttonClass = "btn_unstyle btn_msg_action ts_icon ts_tip ts_tip_top ts_tip_float ts_tip_delay_60 ts_tip_hidden";
         var permalink = $ahc.data("abs_permalink");
 
         // Quote Button
-        $ahc.prepend($("<a></a>", {
+        $ahc.prepend($("<button></button>", {
+          "type": "button",
           "class": "ts_icon_quote " + buttonClass,
           "data-action": "quote",
           "data-permalink": permalink,
@@ -74,7 +75,8 @@ document.body.appendChild(function() {
           var user = userURL.split("/")[2];
           var rawMessage = messageContent.children("span.message_body").html();
           var message = rawMessage ? rawMessage.replace(/<br>/g, "\n") : "";
-          $ahc.prepend($("<a></a>", {
+          $ahc.prepend($("<button></button>", {
+            "type": "button",
             "class": "ts_icon_share_filled " + buttonClass,
             "data-action": "reply",
             "data-user": user,
@@ -83,7 +85,8 @@ document.body.appendChild(function() {
           }).append($("<span></span>", {class: "ts_tip_tip", text: "Reply"})));
 
           // Mention Button
-          $ahc.prepend($("<a></a>", {
+          $ahc.prepend($("<button></button>", {
+            "type": "button",
             "class": "ts_icon_mentions " + buttonClass,
             "data-action": "mention",
             "data-user": user,
