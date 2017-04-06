@@ -28,6 +28,30 @@ document.body.appendChild(function() {
           }
         }
       },
+
+      appendMessageInputText: function(text) {
+        var messageInputText = $("#msg_input div p")
+        messageInputText.html(messageInputText.html() + text);
+
+        var node = document.querySelector('#msg_input > .ql-editor');
+        node.focus();
+      },
+
+      prependMessageInputText: function(text) {
+        var messageInputText = $("#msg_input div p")
+        messageInputText.html(text + messageInputText.html());
+
+        // キャレットを末尾に移動させる(by nyamadandan)
+        var node = document.querySelector('#msg_input > .ql-editor');
+        var range = document.createRange();
+        var sel = window.getSelection();
+        range.setStartAfter(node.lastChild);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+
+        node.focus();
+      },
     };
 
     TS.ui.messages.updateMessageHoverContainer = function($msg) {
@@ -78,7 +102,7 @@ document.body.appendChild(function() {
           $ahc.prepend($("<button></button>", {
             "type": "button",
             "class": "ts_icon_share_filled " + buttonClass,
-            "data-action": "reply",
+            "data-action": "reply2",
             "data-user": user,
             "data-message": message,
             "data-permalink": permalink,
@@ -106,40 +130,27 @@ document.body.appendChild(function() {
     });
 
     $(document).on("click", "[data-action='quote']", function(event) {
-      var messageInput = document.getElementById("msg_input");
       var permalink = $(event.target).data("permalink");
       var selectedText = replyAndQuoteButton.selectedText;
-      messageInput.value += "\n" + (selectedText !== "" ? replyAndQuoteButton.quoteText(selectedText) : permalink);
-
-      messageInput.focus();
-      messageInput.selectionStart = 0;
-      messageInput.selectionEnd = 0;
-
-      $("#msg_input").trigger("autosize").trigger("autosize-resize");
+      replyAndQuoteButton.appendMessageInputText("\n" + (selectedText !== "" ? replyAndQuoteButton.quoteText(selectedText) : permalink));
     });
 
-    $(document).on("mousedown", "[data-action='reply']", function(event) {
+    $(document).on("mousedown", "[data-action='reply2']", function(event) {
       var selectedText = document.getSelection().toString();
       replyAndQuoteButton.selectedText = selectedText;
     });
 
-    $(document).on("click", "[data-action='reply']", function(event) {
-      var messageInput = document.getElementById("msg_input");
+    $(document).on("click", "[data-action='reply2']", function(event) {
       var user = $(event.target).data("user");
       var permalink = $(event.target).data("permalink");
       var messageText = $(event.target).data("message");
       var selectedText = replyAndQuoteButton.selectedText;
-      messageInput.value = "@" + user + ":\n" +  replyAndQuoteButton.getQuotedText(messageText, selectedText, permalink) + "\n" + messageInput.value;
-      messageInput.focus();
-      $("#msg_input").trigger("autosize").trigger("autosize-resize");
+      replyAndQuoteButton.prependMessageInputText("@" + user + ":\n" +  replyAndQuoteButton.getQuotedText(messageText, selectedText, permalink) + "\n");
     });
 
     $(document).on("click", "[data-action='mention']", function(event) {
-      var messageInput = document.getElementById("msg_input");
       var user = $(event.target).data("user");
-      messageInput.value = "@" + user + ":\n" + messageInput.value;
-      messageInput.focus();
-      $("#msg_input").trigger("autosize").trigger("autosize-resize");
+      replyAndQuoteButton.prependMessageInputText("@" + user + ":\n");
     });
   };
 
