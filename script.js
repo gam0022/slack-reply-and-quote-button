@@ -30,7 +30,7 @@ document.body.appendChild(function() {
       },
 
       appendMessageInputText: function(text) {
-        var messageInputText = $("#msg_input div p")
+        var messageInputText = $("#msg_input div p:last-child")
         messageInputText.html(messageInputText.html() + text);
 
         var node = document.querySelector('#msg_input > .ql-editor');
@@ -38,7 +38,7 @@ document.body.appendChild(function() {
       },
 
       prependMessageInputText: function(text) {
-        var messageInputText = $("#msg_input div p")
+        var messageInputText = $("#msg_input div p:first-child")
         messageInputText.html(text + messageInputText.html());
 
         // キャレットを末尾に移動させる(by nyamadandan)
