@@ -29,17 +29,21 @@ document.body.appendChild(function() {
         }
       },
 
+      normalizeNewline: function(text) {
+        return '<p>' + text.replace(/\n/g, '</p><p>') + '</p>';
+      },
+
       appendMessageInputText: function(text) {
-        var messageInputText = $("#msg_input div p:last-child")
-        messageInputText.html(messageInputText.html() + text);
+        var messageInputText = $("#msg_input div")
+        messageInputText.append(replyAndQuoteButton.normalizeNewline(text));
 
         var node = document.querySelector('#msg_input > .ql-editor');
         node.focus();
       },
 
       prependMessageInputText: function(text) {
-        var messageInputText = $("#msg_input div p:first-child")
-        messageInputText.html(text + messageInputText.html());
+        var messageInputText = $("#msg_input div")
+        messageInputText.prepend(replyAndQuoteButton.normalizeNewline(text));
 
         // キャレットを末尾に移動させる(by nyamadandan)
         var node = document.querySelector('#msg_input > .ql-editor');
@@ -132,7 +136,7 @@ document.body.appendChild(function() {
     $(document).on("click", "[data-action='quote']", function(event) {
       var permalink = $(event.target).data("permalink");
       var selectedText = replyAndQuoteButton.selectedText;
-      replyAndQuoteButton.appendMessageInputText("\n" + (selectedText !== "" ? replyAndQuoteButton.quoteText(selectedText) : permalink));
+      replyAndQuoteButton.appendMessageInputText(selectedText !== "" ? replyAndQuoteButton.quoteText(selectedText) : permalink);
     });
 
     $(document).on("mousedown", "[data-action='reply2']", function(event) {
@@ -145,12 +149,12 @@ document.body.appendChild(function() {
       var permalink = $(event.target).data("permalink");
       var messageText = $(event.target).data("message");
       var selectedText = replyAndQuoteButton.selectedText;
-      replyAndQuoteButton.prependMessageInputText("@" + user + ":\n" +  replyAndQuoteButton.getQuotedText(messageText, selectedText, permalink) + "\n");
+      replyAndQuoteButton.prependMessageInputText("@" + user + ":\n" +  replyAndQuoteButton.getQuotedText(messageText, selectedText, permalink));
     });
 
     $(document).on("click", "[data-action='mention']", function(event) {
       var user = $(event.target).data("user");
-      replyAndQuoteButton.prependMessageInputText("@" + user + ":\n");
+      replyAndQuoteButton.prependMessageInputText("@" + user + ":");
     });
   };
 
