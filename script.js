@@ -97,10 +97,11 @@ document.body.appendChild(function() {
           "data-permalink": permalink,
         }).append($("<span></span>", {class: "ts_tip_tip", text: "Quote"})));
 
-        var userURL = messageContent.find("a.message_sender").attr("href");
-        if (userURL != null) {
-          // Reply Button
+        var userURL = $msg.find("a.member_image:first").attr("href");
+        if (userURL) {
           var user = userURL.split("/")[2];
+
+          // Reply Button
           var rawMessage = messageContent.children("span.message_body").html();
           var message = rawMessage ? rawMessage.replace(/<br>/g, "\n") : "";
           $ahc.prepend($("<button></button>", {
