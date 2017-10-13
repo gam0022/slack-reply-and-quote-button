@@ -103,7 +103,7 @@ document.body.appendChild(function() {
           var user = TS.model.members.find(function(user, index, array){
             return user.id === user_id;
           });
-          var user_name = user.name;
+          var user_name = user._display_name_normalized_lc;
 
           // Reply Button
           var rawMessage = messageContent.children("span.message_body").html();
