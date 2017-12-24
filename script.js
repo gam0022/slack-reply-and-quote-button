@@ -58,31 +58,16 @@ document.body.appendChild(function() {
       },
     };
 
+    replyAndQuoteButton.updateMessageHoverContainer = TS.ui.messages.updateMessageHoverContainer;
+
     TS.ui.messages.updateMessageHoverContainer = function($msg) {
-      $msg.removeClass("dirty_hover_container");
-      var model_ob_id = $msg.data("model-ob-id");
-      var model_ob = model_ob_id ? TS.shared.getModelObById(model_ob_id) : TS.shared.getActiveModelOb();
-      var msg_ts = $msg.data("ts");
-      var msg = TS.utility.msgs.getMsg(msg_ts, model_ob.msgs);
-      if (!msg && model_ob._archive_msgs)
-        msg = TS.utility.msgs.getMsg(msg_ts, model_ob._archive_msgs);
-      if (!msg) {
-        TS.error(msg_ts + " not found in " + model_ob_id);
-        return
-      }
-      var rxn_key = TS.rxns.getRxnKeyByMsgType(msg);
-      var $ahc = $msg.find(".action_hover_container");
-      $ahc.html(TS.templates.action_hover_items({
-        msg: msg,
-        actions: TS.utility.msgs.getMsgActions(msg, model_ob),
-        default_rxns: TS.boot_data.feature_thanks && !TS.rxns.getExistingRxnsByKey(rxn_key) && TS.emoji.getDefaultRxns(),
-        ts_tip_delay_class: "ts_tip_delay_60",
-        show_rxn_action: !!$ahc.data("show_rxn_action"),
-        show_reply_action: !!$ahc.data("show_reply_action"),
-        show_jump_action: !!$ahc.data("show_jump_action"),
-        show_comment_action: !!$ahc.data("show_comment_action"),
-        abs_permalink: $ahc.data("abs_permalink")
-      }))
+      var t = $msg;
+
+      // begin: TS.ui.messages.updateMessageHoverContainer original code
+      t.removeClass("dirty_hover_container");var n=t.data("model-ob-id");var r=n?TS.redux.channels.getEntityById(n):TS.shared.legacyGetActiveModelOb();if(!r)return;var i=t.attr("data-ts");var a=TS.utility.msgs.getMsg(i,r.msgs);!a&&r._archive_msgs&&(a=TS.utility.msgs.getMsg(i,r._archive_msgs));!a&&TS.model.unread_view_is_showing&&(a=TS.client.unread.getMessage(r,i));a||(a=TS.ui.replies.getActiveMessage(r,i));a||(a=TS.client.threads.getMessage(r,i));if(!a){TS.error(i+" not found in "+n);return}var s=t.find("[data-js=action_hover_container]");var o=t.closest("ts-conversation").length>0;var l=t.closest("#threads_msgs").length>0;var u=TS.boot_data.feature_sli_briefing&&t.closest("#sli_briefing").length>0;var d=o||l;var _=!a.thread_ts||a.thread_ts===a.ts;var c="tombstone"===a.subtype&&r.is_channel&&!r.is_member;s.html(TS.templates.action_hover_items({msg:a,actions:TS.utility.msgs.getMsgActions(a,r),ts_tip_delay_class:"ts_tip_delay_60",is_in_threads_view:l,is_in_thread:d,is_root_msg:_,is_briefing_msg:u,hide_actions_menu:c,show_rxn_action:!!s.data("show_rxn_action"),show_reply_action:!!s.data("show_reply_action"),show_comment_action:!!s.data("show_comment_action"),abs_permalink:s.data("abs_permalink")}));s.toggleClass("narrow_buttons",s.children().length>3)
+      // end
+      
+      var $ahc = s;
 
       try {
         var messageContent = $msg.children(".message_content");
@@ -129,7 +114,6 @@ document.body.appendChild(function() {
         console.error("SlackReplyAndQuoteButtonError.");
         console.info(e.stack);
         console.log("url: " + permalink);
-        return originalHTML;
       }
     };
 
