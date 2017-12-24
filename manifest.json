@@ -3,7 +3,7 @@
   "name": "Slack 返信引用ボタン(Slack Reply and Quote Button)",
   "short_name": "Slack 返信引用ボタン",
   "description": "Slack に返信と引用ボタンをつけます。Add a reply(mention) and quotation button to Slack.",
-  "version" : "1.12",
+  "version" : "1.14",
   "icons": {
     "16": "img/icon16.png",
     "48": "img/icon48.png",

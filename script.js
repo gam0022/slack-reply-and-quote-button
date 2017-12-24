@@ -99,7 +99,11 @@ document.body.appendChild(function() {
 
         var userURL = $msg.find("a.member_image:first").attr("href");
         if (userURL) {
-          var user = userURL.split("/")[2];
+          var user_id = userURL.split("/")[2];
+          var user = TS.model.members.find(function(user, index, array){
+            return user.id === user_id;
+          });
+          var user_name = user._display_name_normalized_lc;
 
           // Reply Button
           var rawMessage = messageContent.children("span.message_body").html();
@@ -108,7 +112,7 @@ document.body.appendChild(function() {
             "type": "button",
             "class": "ts_icon_share_filled " + buttonClass,
             "data-action": "reply2",
-            "data-user": user,
+            "data-user": user_name,
             "data-message": message,
             "data-permalink": permalink,
           }).append($("<span></span>", {class: "ts_tip_tip", text: "Reply"})));
@@ -118,7 +122,7 @@ document.body.appendChild(function() {
             "type": "button",
             "class": "ts_icon_mentions " + buttonClass,
             "data-action": "mention",
-            "data-user": user,
+            "data-user": user_name,
           }).append($("<span></span>", {class: "ts_tip_tip", text: "Mention"})));
         }
       } catch(e) {
