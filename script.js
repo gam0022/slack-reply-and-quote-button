@@ -58,8 +58,6 @@ document.body.appendChild(function() {
       },
     };
 
-    replyAndQuoteButton.updateMessageHoverContainer = TS.ui.messages.updateMessageHoverContainer;
-
     TS.ui.messages.updateMessageHoverContainer = function($msg) {
       var t = $msg;
 
